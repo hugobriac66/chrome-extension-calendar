@@ -14,8 +14,9 @@ npm i
 npm run build
 ```
 
+3. Load extension on chrome
 
-Build extension for development environment
+### Build extension for development environment
 ```bash
 npm run build:dev
 ```
