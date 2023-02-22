@@ -1,0 +1,43 @@
+{
+  "name": "reelay-extenstion",
+  "version": "1.0.0",
+  "description": "This is extension for connecting Reelay.ai to Google calendar",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint src/*.js",
+    "dev": "webpack --mode development",
+    "build": "webpack --env production --mode production",
+    "build:dev": "webpack --env dev --mode production",
+    "build:staging": "webpack --env staging --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Reelay-ai/reelay-extenstion.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Reelay-ai/reelay-extenstion/issues"
+  },
+  "homepage": "https://github.com/Reelay-ai/reelay-extenstion#readme",
+  "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/eslint-parser": "^7.19.1",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.2",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.7.3",
+    "dotenv-webpack": "^8.0.1",
+    "eslint": "8.22.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-webpack-plugin": "^4.0.0",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.6",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
+  }
+}

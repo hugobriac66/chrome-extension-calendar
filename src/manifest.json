@@ -1,10 +1,9 @@
-
 {
     "manifest_version": 3,
     "name": "Reelay.ai",
-    "description": "This is en extention to add and remove bots from the meeetings",
+    "description": "This is an extension to add and remove bots from the meetings",
     "version": "1.0.0",
-    "author": "Ihor Mohyla",
+    "author": "",
     "action": {
         "default_title": "Reelay.ai"
     },
