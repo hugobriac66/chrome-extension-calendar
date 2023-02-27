@@ -1,46 +1,63 @@
-import { API_HOST, INIT_TIMEOUT, DEFAULT_BOT_NAME } from './constants';
-
-const AUTH_BEARER_TOKEN = 'Wk8MX_pWVdSWdSdbJy-6xey7_FmD0jzOn_K4BpmJ8-rQ7iRUBmMf0rsxxy1ea7VjYH4udqSBmIz82JZq6I-7uE8hzE7MnAGrOsDvdoxqc-AddA==';
-const organizationID = 'ORG_cf950ch59mpm4rv72qs0';
+import { INIT_TIMEOUT } from './constants';
+import { formatMeetingTime, createAddDeleteButton } from './helpers/botHelper';
+import {
+    addBot,
+    deleteBot,
+    getBotByMeetingLink,
+} from './services/botService';
 
 let meetingUrl;
+let bot;
+let startMeetingTime;
 
-const addBot = async () => {
-    const options = {
-        method: 'POST',
-        headers: {
-            Authorization: `Bearer ${AUTH_BEARER_TOKEN}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ meetingUrl, botName: DEFAULT_BOT_NAME }),
-    };
-
-    const response = await fetch(
-        `${API_HOST}/recall-ai/bot/create?organizationID=${organizationID}`,
-        options,
-    );
-    const record = await response.json();
-    console.log('record', record);
+const addBotCall = async () => {
+    bot = await addBot(startMeetingTime, meetingUrl);
 };
 
-const addButton = document.createElement('button');
-addButton.id = 'add-bot';
-addButton.innerHTML = 'Add Reelay.ai';
-addButton.style = 'color: #fff; padding: 0 16px; background-color: rgb(26,115,232); line-height: 36px; font-family: \'Google Sans\',Roboto,Arial,sans-serif; font-weight: 500; outline: none; border: none; border-radius: 5px; margin-top: 6px;';
+const deleteBotCall = async () => {
+    bot = await deleteBot(bot);
+};
 
-const init = () => {
-    if (!document.getElementById('add-bot')) {
+const init = async () => {
+    if ((document.getElementById('bot-btn') && document.getElementById('bot-btn').textContent === 'Add Reelay.ai' && bot)
+        || (document.getElementById('bot-btn') && document.getElementById('bot-btn').textContent === 'Delete Reelay.ai' && !bot)
+        || !document.getElementById('bot-btn')) {
         let baseBlock = document.querySelector('a[href^="https://meet.google.com/"]');
         if (baseBlock) {
             baseBlock = baseBlock.parentElement
                 .parentElement
                 .parentElement;
 
-            const startMeetingButton = baseBlock.parentElement;
-            meetingUrl = baseBlock.lastChild.textContent;
+            const meetingTime = baseBlock
+                .parentElement
+                .parentElement
+                .parentElement
+                .parentElement
+                .firstChild
+                .firstChild
+                .nextSibling
+                .firstChild
+                .lastChild;
 
-            addButton.addEventListener('click', addBot);
-            startMeetingButton.appendChild(addButton);
+            if (meetingTime) {
+                startMeetingTime = formatMeetingTime(meetingTime);
+            }
+
+            const startMeetingButton = baseBlock.parentElement;
+
+            meetingUrl = baseBlock.lastChild.textContent;
+            if ((meetingUrl && !bot) || (meetingUrl && bot && bot.meetingLink !== meetingUrl)) {
+                bot = await getBotByMeetingLink(meetingUrl);
+            }
+
+            if (document.getElementById('bot-btn')) {
+                const button = document.getElementById('bot-btn');
+                button.remove();
+            }
+
+            const botButton = createAddDeleteButton(bot);
+            botButton.addEventListener('click', bot ? deleteBotCall : addBotCall);
+            startMeetingButton.appendChild(botButton);
         }
     }
 };
