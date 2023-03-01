@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { API_HOST, DEFAULT_BOT_NAME } from '../constants';
+import { getToken } from './authService';
 
-const AUTH_BEARER_TOKEN = 'Wk8MX_pWVdSWdSdbJy-6xey7_FmD0jzOn_K4BpmJ8-rQ7iRUBmMf0rsxxy1ea7VjYH4udqSBmIz82JZq6I-7uE8hzE7MnAGrOsDvdoxqc-AddA==';
+const AUTH_BEARER_TOKEN = getToken('sessionToken');
 const organizationID = 'ORG_cf950ch59mpm4rv72qs0';
 
 const addBot = async (startMeetingTime, meetingUrl) => {

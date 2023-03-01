@@ -25,8 +25,27 @@ const createAuthButton = () => {
     return authButton;
 };
 
+const createAuthInput = () => {
+    const authInput = document.createElement('input');
+    authInput.id = 'auth-input';
+    authInput.type = 'text';
+    authInput.placeholder = 'Email';
+    authInput.hover = 'border-bottom: 0.5px solid rgb(26,115,232);';
+    authInput.style = 'display: inline; color: #3c4043; background-color: transparent; height: 35px; font-size: 16px; width: 250px; font-family: \'Google Sans\',Roboto,Arial,sans-serif; border: none; outline: none; border-bottom: 0.5px solid #3c4043; margin-top: 6px;';
+
+    return authInput;
+};
+
+const createAuthBlock = () => {
+    const authBlock = document.createElement('div');
+    authBlock.id = 'auth-block';
+    authBlock.appendChild(createAuthInput());
+    authBlock.appendChild(createAuthButton());
+    return authBlock;
+};
+
 export {
     formatMeetingTime,
     createAddDeleteButton,
-    createAuthButton,
+    createAuthBlock,
 };

@@ -1,14 +1,23 @@
 import { INIT_TIMEOUT } from './constants';
-import { formatMeetingTime, createAddDeleteButton } from './helpers/botHelper';
+import {
+    formatMeetingTime,
+    createAddDeleteButton,
+    createAuthBlock,
+} from './helpers/botHelper';
 import {
     addBot,
     deleteBot,
     getBotByMeetingLink,
 } from './services/botService';
+import {
+    getToken,
+    getMagicLink,
+} from './services/authService';
 
 let meetingUrl;
 let bot;
 let startMeetingTime;
+let email;
 
 const addBotCall = async () => {
     bot = await addBot(startMeetingTime, meetingUrl);
@@ -16,6 +25,10 @@ const addBotCall = async () => {
 
 const deleteBotCall = async () => {
     bot = await deleteBot(bot);
+};
+
+const getMagicLinkCall = async () => {
+    await getMagicLink(email);
 };
 
 const init = async () => {
@@ -32,7 +45,7 @@ const init = async () => {
                 .parentElement
                 .parentElement
                 .parentElement
-                .parentElement
+                .parentElement 
                 .firstChild
                 .firstChild
                 .nextSibling
@@ -43,10 +56,10 @@ const init = async () => {
                 startMeetingTime = formatMeetingTime(meetingTime);
             }
 
-            const startMeetingButton = baseBlock.parentElement;
+            const startMeetingBLock = baseBlock.parentElement;
 
             meetingUrl = baseBlock.lastChild.textContent;
-            if ((meetingUrl && !bot) || (meetingUrl && bot && bot.meetingLink !== meetingUrl)) {
+            if (getToken('sessionToken') && ((meetingUrl && !bot) || (meetingUrl && bot && bot.meetingLink !== meetingUrl))) {
                 bot = await getBotByMeetingLink(meetingUrl);
             }
 
@@ -55,10 +68,30 @@ const init = async () => {
                 button.remove();
             }
 
-            const botButton = createAddDeleteButton(bot);
-            botButton.addEventListener('click', bot ? deleteBotCall : addBotCall);
-            startMeetingButton.appendChild(botButton);
+            if (getToken('sessionToken')) {
+                const botButton = createAddDeleteButton(bot);
+                botButton.addEventListener('click', bot ? deleteBotCall : addBotCall);
+                startMeetingBLock.appendChild(botButton);
+            }
+
+            if (!document.getElementById('auth-block') && !getToken('sessionToken')) {
+                const authBlock = createAuthBlock();
+                startMeetingBLock.appendChild(authBlock);
+
+                const authButton = document.getElementById('auth-btn');
+                authButton.addEventListener('click', getMagicLinkCall);
+
+                const authInput = document.getElementById('auth-input');
+                authInput.addEventListener('input', (() => {
+                    email = authInput.value;
+                }));
+            }
         }
+    }
+
+    if (document.getElementById('auth-block') && getToken('sessionToken')) {
+        const authBlock = document.getElementById('auth-block');
+        authBlock.remove();
     }
 };
 
