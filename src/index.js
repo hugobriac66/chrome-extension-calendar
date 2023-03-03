@@ -11,13 +11,13 @@ import {
 } from './services/botService';
 import {
     getToken,
-    getMagicLink,
+    setToken,
+    getTokenFromChromeStorage,
 } from './services/authService';
 
 let meetingUrl;
 let bot;
 let startMeetingTime;
-let email;
 
 const addBotCall = async () => {
     bot = await addBot(startMeetingTime, meetingUrl);
@@ -27,11 +27,20 @@ const deleteBotCall = async () => {
     bot = await deleteBot(bot);
 };
 
-const getMagicLinkCall = async () => {
-    await getMagicLink(email);
-};
-
 const init = async () => {
+    if (!getToken('sessionToken')
+        || (getTokenFromChromeStorage()
+            && getToken('sessionToken') !== getTokenFromChromeStorage())) {
+        const sessionToken = getTokenFromChromeStorage();
+        if (sessionToken) {
+            setToken('sessionToken', sessionToken);
+        }
+    }
+
+    if (!getTokenFromChromeStorage() && getToken('sessionToken')) {
+        localStorage.removeItem('sessionToken');
+    }
+
     if ((document.getElementById('bot-btn') && document.getElementById('bot-btn').textContent === 'Add Reelay.ai' && bot)
         || (document.getElementById('bot-btn') && document.getElementById('bot-btn').textContent === 'Delete Reelay.ai' && !bot)
         || !document.getElementById('bot-btn')) {
@@ -45,7 +54,7 @@ const init = async () => {
                 .parentElement
                 .parentElement
                 .parentElement
-                .parentElement 
+                .parentElement
                 .firstChild
                 .firstChild
                 .nextSibling
@@ -77,14 +86,6 @@ const init = async () => {
             if (!document.getElementById('auth-block') && !getToken('sessionToken')) {
                 const authBlock = createAuthBlock();
                 startMeetingBLock.appendChild(authBlock);
-
-                const authButton = document.getElementById('auth-btn');
-                authButton.addEventListener('click', getMagicLinkCall);
-
-                const authInput = document.getElementById('auth-input');
-                authInput.addEventListener('input', (() => {
-                    email = authInput.value;
-                }));
             }
         }
     }

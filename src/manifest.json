@@ -10,7 +10,16 @@
           "js": ["index.js"]
         }
     ],
+    "host_permissions": [
+        "<all_urls>"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
     "permissions": [
-        "scripting"
+        "scripting",
+        "tabs",
+        "cookies",
+        "storage"
     ]
 }

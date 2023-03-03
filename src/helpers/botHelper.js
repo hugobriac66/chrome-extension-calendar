@@ -1,3 +1,5 @@
+import { CLIENT_HOST } from '../constants';
+
 const formatMeetingTime = (timeBlock) => {
     const date = timeBlock.textContent;
     const currentYear = new Date().getFullYear();
@@ -16,31 +18,20 @@ const createAddDeleteButton = (botInfo) => {
     return botButton;
 };
 
-const createAuthButton = () => {
-    const authButton = document.createElement('button');
-    authButton.id = 'auth-btn';
-    authButton.innerHTML = 'Login';
-    authButton.style = 'display: inline; color: #fff; padding: 0 16px; background-color: rgb(26,115,232); line-height: 36px; font-family: \'Google Sans\',Roboto,Arial,sans-serif; font-weight: 500; outline: none; border: none; border-radius: 5px; margin-top: 6px; margin-left: 12px;';
+const createAuthLink = () => {
+    const authLink = document.createElement('a');
+    authLink.href = `${CLIENT_HOST}/login`;
+    authLink.target = '_blank';
+    authLink.innerHTML = 'Login';
+    authLink.style = 'display: block; background-color: rgb(26,115,232); color: #fff; padding: 0px 16px; border-radius: 4px; line-height: 36px; font-family: "Google Sans",Roboto,Arial,sans-serif; font-weight: 500; margin-top: 6px; width: fit-content;';
 
-    return authButton;
-};
-
-const createAuthInput = () => {
-    const authInput = document.createElement('input');
-    authInput.id = 'auth-input';
-    authInput.type = 'text';
-    authInput.placeholder = 'Email';
-    authInput.hover = 'border-bottom: 0.5px solid rgb(26,115,232);';
-    authInput.style = 'display: inline; color: #3c4043; background-color: transparent; height: 35px; font-size: 16px; width: 250px; font-family: \'Google Sans\',Roboto,Arial,sans-serif; border: none; outline: none; border-bottom: 0.5px solid #3c4043; margin-top: 6px;';
-
-    return authInput;
+    return authLink;
 };
 
 const createAuthBlock = () => {
     const authBlock = document.createElement('div');
     authBlock.id = 'auth-block';
-    authBlock.appendChild(createAuthInput());
-    authBlock.appendChild(createAuthButton());
+    authBlock.appendChild(createAuthLink());
     return authBlock;
 };
 
