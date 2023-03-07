@@ -1,4 +1,4 @@
-import { INIT_TIMEOUT } from './constants';
+import { INIT_TIMEOUT, DEFAULT_BOT_NAME } from './constants';
 import {
     formatMeetingTime,
     createAddDeleteButton,
@@ -39,8 +39,8 @@ const init = async () => {
         localStorage.removeItem('sessionToken');
     }
 
-    if ((document.getElementById('bot-btn') && document.getElementById('bot-btn').textContent === 'Add Reelay.ai' && bot)
-        || (document.getElementById('bot-btn') && document.getElementById('bot-btn').textContent === 'Delete Reelay.ai' && !bot)
+    if ((document.getElementById('bot-btn') && document.getElementById('bot-btn').textContent === `Add ${DEFAULT_BOT_NAME}` && bot)
+        || (document.getElementById('bot-btn') && document.getElementById('bot-btn').textContent === `Delete ${DEFAULT_BOT_NAME}` && !bot)
         || !document.getElementById('bot-btn')) {
         let baseBlock = document.querySelector('a[href^="https://meet.google.com/"]');
         if (baseBlock) {

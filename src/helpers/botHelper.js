@@ -1,4 +1,4 @@
-import { CLIENT_HOST } from '../constants';
+import { CLIENT_HOST, DEFAULT_BOT_NAME } from '../constants';
 
 const formatMeetingTime = (timeBlock) => {
     const date = timeBlock.textContent;
@@ -12,7 +12,7 @@ const formatMeetingTime = (timeBlock) => {
 const createAddDeleteButton = (botInfo) => {
     const botButton = document.createElement('button');
     botButton.id = 'bot-btn';
-    botButton.innerHTML = `${botInfo ? 'Delete Reelay.ai' : 'Add Reelay.ai'}`;
+    botButton.innerHTML = `${botInfo ? `Delete ${DEFAULT_BOT_NAME}` : `Add ${DEFAULT_BOT_NAME}`}`;
     botButton.style = 'display: inline; color: #fff; padding: 0 16px; background-color: rgb(26,115,232); line-height: 36px; font-family: \'Google Sans\',Roboto,Arial,sans-serif; font-weight: 500; outline: none; border: none; border-radius: 5px; margin-top: 6px;';
 
     return botButton;
