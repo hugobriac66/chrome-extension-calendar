@@ -9,12 +9,21 @@ const formatMeetingTime = (timeBlock) => {
     return currentFormatDate.toISOString();
 };
 
-const createAddDeleteButton = (botInfo) => {
+const buttonStyle = 'display: inline; color: #fff; padding: 0 16px; background-color: rgb(26,115,232); line-height: 36px; font-family: \'Google Sans\',Roboto,Arial,sans-serif; font-weight: 500; outline: none; border: none; border-radius: 5px; margin-top: 6px;';
+
+const createAddButton = () => {
     const botButton = document.createElement('button');
     botButton.id = 'bot-btn';
-    botButton.innerHTML = `${botInfo ? `Delete ${DEFAULT_BOT_NAME}` : `Add ${DEFAULT_BOT_NAME}`}`;
-    botButton.style = 'display: inline; color: #fff; padding: 0 16px; background-color: rgb(26,115,232); line-height: 36px; font-family: \'Google Sans\',Roboto,Arial,sans-serif; font-weight: 500; outline: none; border: none; border-radius: 5px; margin-top: 6px;';
+    botButton.innerHTML = `Add ${DEFAULT_BOT_NAME}`;
+    botButton.style = buttonStyle;
+    return botButton;
+};
 
+const createDeleteButton = () => {
+    const botButton = document.createElement('button');
+    botButton.id = 'bot-btn';
+    botButton.innerHTML = `Delete ${DEFAULT_BOT_NAME}`;
+    botButton.style = buttonStyle;
     return botButton;
 };
 
@@ -37,6 +46,7 @@ const createAuthBlock = () => {
 
 export {
     formatMeetingTime,
-    createAddDeleteButton,
+    createAddButton,
+    createDeleteButton,
     createAuthBlock,
 };

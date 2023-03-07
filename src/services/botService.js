@@ -1,16 +1,16 @@
 import axios from 'axios';
 import { API_HOST, DEFAULT_BOT_NAME } from '../constants';
-import { getToken } from './authService';
+import { getTokenFromChromeStorage } from './authService';
 
-const AUTH_BEARER_TOKEN = getToken('sessionToken');
-const organizationID = 'ORG_cf950ch59mpm4rv72qs0';
+const organizationID = 'ORG_cf8pnkp3h0a020gfj7b0';
 
 const addBot = async (startMeetingTime, meetingUrl) => {
+    const chromeStorageToken = await getTokenFromChromeStorage();
     const config = {
         method: 'post',
         url: `${API_HOST}/recall-ai/bot/create?organizationID=${organizationID}`,
         headers: {
-            Authorization: `Bearer ${AUTH_BEARER_TOKEN}`,
+            Authorization: `Bearer ${chromeStorageToken}`,
             'Content-Type': 'application/json',
         },
         data: {
@@ -29,11 +29,12 @@ const addBot = async (startMeetingTime, meetingUrl) => {
 };
 
 const deleteBot = async (bot) => {
+    const chromeStorageToken = await getTokenFromChromeStorage();
     const config = {
         method: 'delete',
         url: `${API_HOST}/recall-ai/bot/delete?organizationID=${organizationID}`,
         headers: {
-            Authorization: `Bearer ${AUTH_BEARER_TOKEN}`,
+            Authorization: `Bearer ${chromeStorageToken}`,
             'Content-Type': 'application/json',
         },
         data: { botID: bot.id },
@@ -48,11 +49,12 @@ const deleteBot = async (bot) => {
 };
 
 const getBotByMeetingLink = async (meetingUrl) => {
+    const chromeStorageToken = await getTokenFromChromeStorage();
     const config = {
         method: 'get',
         url: `${API_HOST}/recall-ai/bot/meeting-link?organizationID=${organizationID}&meetingLink=https://${meetingUrl}`,
         headers: {
-            Authorization: `Bearer ${AUTH_BEARER_TOKEN}`,
+            Authorization: `Bearer ${chromeStorageToken}`,
             'Content-Type': 'application/json',
         },
     };

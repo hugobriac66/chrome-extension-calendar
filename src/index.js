@@ -1,7 +1,8 @@
 import { INIT_TIMEOUT, DEFAULT_BOT_NAME } from './constants';
 import {
     formatMeetingTime,
-    createAddDeleteButton,
+    createAddButton,
+    createDeleteButton,
     createAuthBlock,
 } from './helpers/botHelper';
 import {
@@ -10,8 +11,6 @@ import {
     getBotByMeetingLink,
 } from './services/botService';
 import {
-    getToken,
-    setToken,
     getTokenFromChromeStorage,
 } from './services/authService';
 
@@ -27,17 +26,11 @@ const deleteBotCall = async () => {
     bot = await deleteBot(bot);
 };
 
+const addButton = createAddButton();
+const deleteButton = createDeleteButton();
+
 const init = async () => {
     const chromeStorageToken = await getTokenFromChromeStorage();
-    if (!getToken('sessionToken')
-        || (chromeStorageToken
-            && getToken('sessionToken') !== chromeStorageToken)) {
-        setToken('sessionToken', chromeStorageToken);
-    }
-
-    if (!chromeStorageToken && getToken('sessionToken')) {
-        localStorage.removeItem('sessionToken');
-    }
 
     if ((document.getElementById('bot-btn') && document.getElementById('bot-btn').textContent === `Add ${DEFAULT_BOT_NAME}` && bot)
         || (document.getElementById('bot-btn') && document.getElementById('bot-btn').textContent === `Delete ${DEFAULT_BOT_NAME}` && !bot)
@@ -66,7 +59,8 @@ const init = async () => {
             const startMeetingBLock = baseBlock.parentElement;
 
             meetingUrl = baseBlock.lastChild.textContent;
-            if (getToken('sessionToken') && ((meetingUrl && !bot) || (meetingUrl && bot && bot.meetingLink !== meetingUrl))) {
+            // eslint-disable-next-line max-len
+            if (chromeStorageToken && ((meetingUrl && !bot) || (meetingUrl && bot && bot.meetingLink !== meetingUrl))) {
                 bot = await getBotByMeetingLink(meetingUrl);
             }
 
@@ -75,20 +69,20 @@ const init = async () => {
                 button.remove();
             }
 
-            if (getToken('sessionToken')) {
-                const botButton = createAddDeleteButton(bot);
+            if (chromeStorageToken) {
+                const botButton = (bot) ? deleteButton : addButton;
                 botButton.addEventListener('click', bot ? deleteBotCall : addBotCall);
                 startMeetingBLock.appendChild(botButton);
             }
 
-            if (!document.getElementById('auth-block') && !getToken('sessionToken')) {
+            if (!document.getElementById('auth-block') && !chromeStorageToken) {
                 const authBlock = createAuthBlock();
                 startMeetingBLock.appendChild(authBlock);
             }
         }
     }
 
-    if (document.getElementById('auth-block') && getToken('sessionToken')) {
+    if (document.getElementById('auth-block') && chromeStorageToken) {
         const authBlock = document.getElementById('auth-block');
         authBlock.remove();
     }
