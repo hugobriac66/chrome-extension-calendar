@@ -28,16 +28,14 @@ const deleteBotCall = async () => {
 };
 
 const init = async () => {
+    const chromeStorageToken = await getTokenFromChromeStorage();
     if (!getToken('sessionToken')
-        || (getTokenFromChromeStorage()
-            && getToken('sessionToken') !== getTokenFromChromeStorage())) {
-        const sessionToken = getTokenFromChromeStorage();
-        if (sessionToken) {
-            setToken('sessionToken', sessionToken);
-        }
+        || (chromeStorageToken
+            && getToken('sessionToken') !== chromeStorageToken)) {
+        setToken('sessionToken', chromeStorageToken);
     }
 
-    if (!getTokenFromChromeStorage() && getToken('sessionToken')) {
+    if (!chromeStorageToken && getToken('sessionToken')) {
         localStorage.removeItem('sessionToken');
     }
 
