@@ -9,13 +9,24 @@ const formatMeetingTime = (timeBlock) => {
     return currentFormatDate.toISOString();
 };
 
-const buttonStyle = 'display: inline; color: #fff; padding: 0 16px; background-color: rgb(26,115,232); line-height: 36px; font-family: \'Google Sans\',Roboto,Arial,sans-serif; font-weight: 500; outline: none; border: none; border-radius: 5px; margin-top: 6px;';
+const buttonStyle = 'display: inline; color: #fff; cursor: pointer; padding: 0 16px; background-color: rgb(26,115,232); line-height: 36px; font-family: \'Google Sans\',Roboto,Arial,sans-serif; font-weight: 500; outline: none; border: none; border-radius: 5px; margin-top: 6px;';
+const onmouseover = (el) => function () {
+    // eslint-disable-next-line no-param-reassign
+    el.style.backgroundColor = 'rgb(66,133,244)';
+};
+
+const onmouseout = (el) => function () {
+    // eslint-disable-next-line no-param-reassign
+    el.style.backgroundColor = 'rgb(26,115,232)';
+};
 
 const createAddButton = () => {
     const botButton = document.createElement('button');
     botButton.id = 'bot-btn';
     botButton.innerHTML = `Add ${DEFAULT_BOT_NAME}`;
     botButton.style = buttonStyle;
+    botButton.onmouseover = onmouseover(botButton);
+    botButton.onmouseout = onmouseout(botButton);
     return botButton;
 };
 
@@ -24,6 +35,8 @@ const createDeleteButton = () => {
     botButton.id = 'bot-btn';
     botButton.innerHTML = `Delete ${DEFAULT_BOT_NAME}`;
     botButton.style = buttonStyle;
+    botButton.onmouseover = onmouseover(botButton);
+    botButton.onmouseout = onmouseout(botButton);
     return botButton;
 };
 
@@ -32,7 +45,9 @@ const createAuthLink = () => {
     authLink.href = `${CLIENT_HOST}/login`;
     authLink.target = '_blank';
     authLink.innerHTML = 'Login';
-    authLink.style = 'display: block; background-color: rgb(26,115,232); color: #fff; padding: 0px 16px; border-radius: 4px; line-height: 36px; font-family: "Google Sans",Roboto,Arial,sans-serif; font-weight: 500; margin-top: 6px; width: fit-content;';
+    authLink.onmouseover = onmouseover(authLink);
+    authLink.onmouseout = onmouseout(authLink);
+    authLink.style = 'display: block; background-color: rgb(26,115,232); cursor: pointer; color: #fff; padding: 0px 16px; border-radius: 4px; line-height: 36px; font-family: "Google Sans",Roboto,Arial,sans-serif; font-weight: 500; margin-top: 6px; width: fit-content;';
 
     return authLink;
 };
