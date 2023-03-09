@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reelay.ia</title>
+    <style type="text/css">
+        .popup-block {
+            padding: 10px;
+        }
+
+        #logo {
+            display: block;
+            text-align: center;
+        }
+
+        .popup-auth-link {
+            display: block;
+            background-color: rgb(26,115,232);
+            cursor: pointer;
+            color: #fff;
+            padding: 0px 16px;
+            border-radius: 4px;
+            line-height: 34px;
+            font-family: "Google Sans",Roboto,Arial,sans-serif;
+            font-weight: 500;
+            margin-top: 10px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            text-decoration: none;
+        }
+
+        .popup-auth-link:hover,
+        .popup-auth-link:active {
+            background-color: rgb(66,133,244);
+        }
+        .popup-is-auth-text {
+            font-family: Roboto,Arial,sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            min-width: 160px;
+            text-align: center;
+            margin: 10px 0 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="popup-block">
+        <a id="logo" target="_blank" href="#"><img src="logo.png" width="120"></a>
+        <a id="login" target="_blank" class="popup-auth-link">Login</a>
+        <p id="is-loged-in" class="popup-is-auth-text">You are logged in and can use Reelay</p>
+    </div>
+    
+</body>
+<script src="popup.js"></script>
+</html>

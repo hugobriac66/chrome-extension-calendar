@@ -4,6 +4,13 @@
     "description": "This is an extension to add and remove bots from the meetings",
     "version": "1.0.0",
     "author": "",
+    "action": {
+        "default_popup": "popup.html",
+        "default_title": "Reelay.com"
+    },
+    "icons": {
+        "128": "icon128.png"
+    },
     "content_scripts": [
         {
           "matches": ["https://calendar.google.com/*"],

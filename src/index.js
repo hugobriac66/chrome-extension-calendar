@@ -1,10 +1,13 @@
-import { INIT_TIMEOUT, DEFAULT_BOT_NAME } from './constants';
+import {
+    INIT_TIMEOUT,
+} from './constants';
 import {
     formatMeetingTime,
     createAddButton,
     createDeleteButton,
-    createAuthBlock,
+    createBotBtnBlock,
 } from './helpers/botHelper';
+import findMeetingBlockItems from './helpers/meetingBlockHelper';
 import {
     addBot,
     deleteBot,
@@ -17,74 +20,62 @@ import {
 let meetingUrl;
 let bot;
 let startMeetingTime;
+const btnBlockName = 'bot-btn-block';
+const addButton = createAddButton();
+const deleteButton = createDeleteButton();
+const botBtnBlock = createBotBtnBlock();
+botBtnBlock.appendChild(addButton);
+botBtnBlock.appendChild(deleteButton);
 
 const addBotCall = async () => {
-    bot = await addBot(startMeetingTime, meetingUrl);
+    addBot(startMeetingTime, meetingUrl).then(
+        (res) => {
+            if (res) {
+                bot = res;
+                addButton.style.display = 'none';
+                deleteButton.style.display = 'inline';
+            }
+        },
+    );
 };
 
 const deleteBotCall = async () => {
-    bot = await deleteBot(bot);
+    deleteBot(bot).then(
+        (res) => {
+            bot = res;
+            deleteButton.style.display = 'none';
+            addButton.style.display = 'inline';
+        },
+    );
 };
 
-const addButton = createAddButton();
-const deleteButton = createDeleteButton();
+addButton.addEventListener('click', addBotCall);
+deleteButton.addEventListener('click', deleteBotCall);
 
 const init = async () => {
     const chromeStorageToken = await getTokenFromChromeStorage();
+    const baseBlock = document.querySelector('a[href^="https://meet.google.com/"]');
 
-    if ((document.getElementById('bot-btn') && document.getElementById('bot-btn').textContent === `Add ${DEFAULT_BOT_NAME}` && bot)
-        || (document.getElementById('bot-btn') && document.getElementById('bot-btn').textContent === `Delete ${DEFAULT_BOT_NAME}` && !bot)
-        || !document.getElementById('bot-btn')) {
-        let baseBlock = document.querySelector('a[href^="https://meet.google.com/"]');
-        if (baseBlock) {
-            baseBlock = baseBlock.parentElement
-                .parentElement
-                .parentElement;
+    if (baseBlock) {
+        const meetingBlockItems = findMeetingBlockItems(baseBlock);
+        const { meetingTime, startMeetingBLock } = meetingBlockItems;
+        meetingUrl = meetingBlockItems.meetingUrl;
 
-            const meetingTime = baseBlock
-                .parentElement
-                .parentElement
-                .parentElement
-                .parentElement
-                .firstChild
-                .firstChild
-                .nextSibling
-                .firstChild
-                .lastChild;
+        if (meetingTime) startMeetingTime = formatMeetingTime(meetingTime);
 
-            if (meetingTime) {
-                startMeetingTime = formatMeetingTime(meetingTime);
-            }
-
-            const startMeetingBLock = baseBlock.parentElement;
-
-            meetingUrl = baseBlock.lastChild.textContent;
-            // eslint-disable-next-line max-len
-            if (chromeStorageToken && ((meetingUrl && !bot) || (meetingUrl && bot && bot.meetingLink !== meetingUrl))) {
-                bot = await getBotByMeetingLink(meetingUrl);
-            }
-
-            if (document.getElementById('bot-btn')) {
-                const button = document.getElementById('bot-btn');
-                button.remove();
-            }
-
-            if (chromeStorageToken) {
-                const botButton = (bot) ? deleteButton : addButton;
-                botButton.addEventListener('click', bot ? deleteBotCall : addBotCall);
-                startMeetingBLock.appendChild(botButton);
-            }
-
-            if (!document.getElementById('auth-block') && !chromeStorageToken) {
-                const authBlock = createAuthBlock();
-                startMeetingBLock.appendChild(authBlock);
-            }
+        // eslint-disable-next-line max-len
+        if (chromeStorageToken && ((meetingUrl && !bot) || (meetingUrl && bot && bot.meetingLink !== meetingUrl))) {
+            bot = await getBotByMeetingLink(meetingUrl);
         }
-    }
 
-    if (document.getElementById('auth-block') && chromeStorageToken) {
-        const authBlock = document.getElementById('auth-block');
-        authBlock.remove();
+        if (!document.getElementById(btnBlockName)) {
+            if (!bot) {
+                deleteButton.style.display = 'none';
+            } else {
+                addButton.style.display = 'none';
+            }
+            startMeetingBLock.appendChild(botBtnBlock);
+        }
     }
 };
 

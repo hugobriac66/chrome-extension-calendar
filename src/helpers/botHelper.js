@@ -1,4 +1,4 @@
-import { CLIENT_HOST, DEFAULT_BOT_NAME } from '../constants';
+import { DEFAULT_BOT_NAME } from '../constants';
 
 const formatMeetingTime = (timeBlock) => {
     const date = timeBlock.textContent;
@@ -22,7 +22,7 @@ const onmouseout = (el) => function () {
 
 const createAddButton = () => {
     const botButton = document.createElement('button');
-    botButton.id = 'bot-btn';
+    botButton.id = 'add-bot-btn';
     botButton.innerHTML = `Add ${DEFAULT_BOT_NAME}`;
     botButton.style = buttonStyle;
     botButton.onmouseover = onmouseover(botButton);
@@ -32,7 +32,7 @@ const createAddButton = () => {
 
 const createDeleteButton = () => {
     const botButton = document.createElement('button');
-    botButton.id = 'bot-btn';
+    botButton.id = 'delete-bot-btn';
     botButton.innerHTML = `Delete ${DEFAULT_BOT_NAME}`;
     botButton.style = buttonStyle;
     botButton.onmouseover = onmouseover(botButton);
@@ -40,28 +40,15 @@ const createDeleteButton = () => {
     return botButton;
 };
 
-const createAuthLink = () => {
-    const authLink = document.createElement('a');
-    authLink.href = `${CLIENT_HOST}/login`;
-    authLink.target = '_blank';
-    authLink.innerHTML = 'Login';
-    authLink.onmouseover = onmouseover(authLink);
-    authLink.onmouseout = onmouseout(authLink);
-    authLink.style = 'display: block; background-color: rgb(26,115,232); cursor: pointer; color: #fff; padding: 0px 16px; border-radius: 4px; line-height: 36px; font-family: "Google Sans",Roboto,Arial,sans-serif; font-weight: 500; margin-top: 6px; width: fit-content;';
-
-    return authLink;
-};
-
-const createAuthBlock = () => {
-    const authBlock = document.createElement('div');
-    authBlock.id = 'auth-block';
-    authBlock.appendChild(createAuthLink());
-    return authBlock;
+const createBotBtnBlock = () => {
+    const botBtnBlock = document.createElement('div');
+    botBtnBlock.id = 'bot-btn-block';
+    return botBtnBlock;
 };
 
 export {
     formatMeetingTime,
     createAddButton,
     createDeleteButton,
-    createAuthBlock,
+    createBotBtnBlock,
 };

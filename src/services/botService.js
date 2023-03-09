@@ -1,11 +1,17 @@
 import axios from 'axios';
-import { API_HOST, DEFAULT_BOT_NAME } from '../constants';
+import { API_HOST, DEFAULT_BOT_NAME, CLIENT_HOST } from '../constants';
 import { getTokenFromChromeStorage } from './authService';
 
-const organizationID = 'ORG_cf8pnkp3h0a020gfj7b0';
+const organizationID = 'ORG_cf950ch59mpm4rv72qs0';
 
 const addBot = async (startMeetingTime, meetingUrl) => {
     const chromeStorageToken = await getTokenFromChromeStorage();
+
+    if (!chromeStorageToken) {
+        window.open(`${CLIENT_HOST}/login`, '_blank');
+        return undefined;
+    }
+
     const config = {
         method: 'post',
         url: `${API_HOST}/recall-ai/bot/create?organizationID=${organizationID}`,
