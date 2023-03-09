@@ -36,7 +36,7 @@ const addBotCall = async () => {
                 deleteButton.style.display = 'inline';
             }
         },
-    );
+    ).catch((error) => console.log('Adding error', error));
 };
 
 const deleteBotCall = async () => {
@@ -46,7 +46,7 @@ const deleteBotCall = async () => {
             deleteButton.style.display = 'none';
             addButton.style.display = 'inline';
         },
-    );
+    ).catch((error) => console.log('Deleting error', error));
 };
 
 addButton.addEventListener('click', addBotCall);
