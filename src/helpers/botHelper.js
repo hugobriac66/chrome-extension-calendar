@@ -3,7 +3,6 @@ import { DEFAULT_BOT_NAME } from '../constants';
 const formatMeetingTime = (timeBlock) => {
     let currentDayHalf;
     const date = timeBlock.textContent;
-    console.log('date ==>', date);
 
     if (date.includes('PM')) {
         currentDayHalf = 'PM';
@@ -15,11 +14,8 @@ const formatMeetingTime = (timeBlock) => {
 
     const currentYear = new Date().getFullYear();
     const dateWithoutWeekDay = date.split(',')[1];
-    console.log('dateWithoutWeekDay ==>', dateWithoutWeekDay);
     const splitedDate = dateWithoutWeekDay.split(' ');
-    console.log('splitedDate ==>', splitedDate);
     const currentFormatDate = new Date(`${splitedDate[1]} ${splitedDate[2].split('⋅')[0]} ${currentYear} ${splitedDate[2].split('⋅')[1].split('–')[0]} ${currentDayHalf}`);
-    console.log('currentFormatDate.toISOString ==>', currentFormatDate.toISOString());
     return currentFormatDate.toISOString();
 };
 

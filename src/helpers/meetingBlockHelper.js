@@ -3,7 +3,7 @@ const findMeetingBlockItems = (block) => {
         .parentElement
         .parentElement;
 
-    const meetingTime = baseBlock
+    const meetingTimeParent = baseBlock
         .parentElement
         .parentElement
         .parentElement
@@ -11,8 +11,9 @@ const findMeetingBlockItems = (block) => {
         .firstChild
         .firstChild
         .nextSibling
-        .firstChild
-        .lastChild;
+        .firstChild;
+
+    const meetingTime = meetingTimeParent.children && meetingTimeParent.children[1];
 
     const startMeetingBLock = baseBlock.parentElement;
 
