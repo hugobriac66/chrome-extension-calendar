@@ -2,19 +2,21 @@ import axios from 'axios';
 import { API_HOST, DEFAULT_BOT_NAME, CLIENT_HOST } from '../constants';
 import { getTokenFromChromeStorage } from './authService';
 
-const organizationID = 'ORG_cf950ch59mpm4rv72qs0';
-
 const addBot = async (startMeetingTime, meetingUrl) => {
     const chromeStorageToken = await getTokenFromChromeStorage();
+    // eslint-disable-next-line
+    const { organizationID } = await chrome.storage.local.get(['organizationID'])
 
     if (!chromeStorageToken) {
         window.open(`${CLIENT_HOST}/login`, '_blank');
         return undefined;
     }
 
+    const queryString = organizationID ? `?organizationID=${organizationID}` : '';
+
     const config = {
         method: 'post',
-        url: `${API_HOST}/recall-ai/bot/create?organizationID=${organizationID}`,
+        url: `${API_HOST}/recall-ai/bot/create${queryString}`,
         headers: {
             Authorization: `Bearer ${chromeStorageToken}`,
             'Content-Type': 'application/json',
@@ -23,6 +25,7 @@ const addBot = async (startMeetingTime, meetingUrl) => {
             meetingUrl: `https://${meetingUrl}`,
             botName: DEFAULT_BOT_NAME,
             joinAt: startMeetingTime,
+            isMeetingExist: false,
         },
     };
 
@@ -35,10 +38,16 @@ const addBot = async (startMeetingTime, meetingUrl) => {
 };
 
 const deleteBot = async (bot) => {
+    console.log('bot', bot);
     const chromeStorageToken = await getTokenFromChromeStorage();
+    // eslint-disable-next-line
+    const { organizationID } = await chrome.storage.local.get(['organizationID'])
+
+    const queryString = organizationID ? `?organizationID=${organizationID}` : '';
+
     const config = {
         method: 'delete',
-        url: `${API_HOST}/recall-ai/bot/delete?organizationID=${organizationID}`,
+        url: `${API_HOST}/recall-ai/bot/delete${queryString}`,
         headers: {
             Authorization: `Bearer ${chromeStorageToken}`,
             'Content-Type': 'application/json',
@@ -56,9 +65,14 @@ const deleteBot = async (bot) => {
 
 const getBotByMeetingLink = async (meetingUrl) => {
     const chromeStorageToken = await getTokenFromChromeStorage();
+    // eslint-disable-next-line
+    const { organizationID } = await chrome.storage.local.get(['organizationID'])
+
+    const queryString = organizationID ? `organizationID=${organizationID}&` : '';
+
     const config = {
         method: 'get',
-        url: `${API_HOST}/recall-ai/bot/meeting-link?organizationID=${organizationID}&meetingLink=https://${meetingUrl}`,
+        url: `${API_HOST}/recall-ai/bot/meeting-link?${queryString}meetingLink=https://${meetingUrl}`,
         headers: {
             Authorization: `Bearer ${chromeStorageToken}`,
             'Content-Type': 'application/json',

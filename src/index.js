@@ -71,8 +71,10 @@ const init = async () => {
         if (!document.getElementById(btnBlockName)) {
             if (!bot) {
                 deleteButton.style.display = 'none';
+                addButton.style.display = 'inline';
             } else {
                 addButton.style.display = 'none';
+                deleteButton.style.display = 'inline';
             }
             startMeetingBLock.appendChild(botBtnBlock);
         }
