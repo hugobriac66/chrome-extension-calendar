@@ -7,11 +7,15 @@ import {
     createDeleteButton,
     createBotBtnBlock,
 } from './helpers/botHelper';
-import findMeetingBlockItems from './helpers/meetingBlockHelper';
+import {
+    findMeetingBlockItems,
+    findGuestList,
+} from './helpers/meetingBlockHelper';
 import {
     addBot,
     deleteBot,
     getBotByMeetingLink,
+    addGuestsToTheMeeting,
 } from './services/botService';
 import {
     getTokenFromChromeStorage,
@@ -20,6 +24,8 @@ import {
 let meetingUrl;
 let bot;
 let startMeetingTime;
+let meetingTitle;
+let guestEmailList = [];
 const btnBlockName = 'bot-btn-block';
 const addButton = createAddButton();
 const deleteButton = createDeleteButton();
@@ -28,12 +34,13 @@ botBtnBlock.appendChild(addButton);
 botBtnBlock.appendChild(deleteButton);
 
 const addBotCall = async () => {
-    addBot(startMeetingTime, meetingUrl).then(
-        (res) => {
+    addBot(startMeetingTime, meetingUrl, meetingTitle).then(
+        async (res) => {
             if (res) {
                 bot = res;
                 addButton.style.display = 'none';
                 deleteButton.style.display = 'inline';
+                await addGuestsToTheMeeting(bot.meetingID, guestEmailList);
             }
         },
     ).catch((error) => console.log('Adding error', error));
@@ -58,8 +65,11 @@ const init = async () => {
 
     if (baseBlock) {
         const meetingBlockItems = findMeetingBlockItems(baseBlock);
+        guestEmailList = findGuestList(baseBlock);
+
         const { meetingTime, startMeetingBLock } = meetingBlockItems;
         meetingUrl = meetingBlockItems.meetingUrl;
+        meetingTitle = meetingBlockItems.meetingTitle;
 
         if (meetingTime) startMeetingTime = formatMeetingTime(meetingTime);
 

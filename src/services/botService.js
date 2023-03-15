@@ -2,7 +2,7 @@ import axios from 'axios';
 import { API_HOST, DEFAULT_BOT_NAME, CLIENT_HOST } from '../constants';
 import { getTokenFromChromeStorage } from './authService';
 
-const addBot = async (startMeetingTime, meetingUrl) => {
+const addBot = async (startMeetingTime, meetingUrl, meetingTitle) => {
     const chromeStorageToken = await getTokenFromChromeStorage();
     // eslint-disable-next-line
     const { organizationID } = await chrome.storage.local.get(['organizationID'])
@@ -26,6 +26,7 @@ const addBot = async (startMeetingTime, meetingUrl) => {
             botName: DEFAULT_BOT_NAME,
             joinAt: startMeetingTime,
             isMeetingExist: false,
+            meetingTitle,
         },
     };
 
@@ -87,8 +88,38 @@ const getBotByMeetingLink = async (meetingUrl) => {
     }
 };
 
+const addGuestsToTheMeeting = async (meetingID, emails) => {
+    if (!emails || !emails.length) {
+        return undefined;
+    }
+
+    const chromeStorageToken = await getTokenFromChromeStorage();
+    // eslint-disable-next-line
+    const { organizationID } = await chrome.storage.local.get(['organizationID'])
+
+    const queryString = organizationID ? `?organizationID=${organizationID}` : '';
+
+    const config = {
+        method: 'post',
+        url: `${API_HOST}/meeting/${meetingID}/invite-users${queryString}`,
+        headers: {
+            Authorization: `Bearer ${chromeStorageToken}`,
+            'Content-Type': 'application/json',
+        },
+        data: { emails },
+    };
+
+    try {
+        const response = await axios(config);
+        return response.data;
+    } catch (error) {
+        return undefined;
+    }
+};
+
 export {
     addBot,
     deleteBot,
     getBotByMeetingLink,
+    addGuestsToTheMeeting,
 };
