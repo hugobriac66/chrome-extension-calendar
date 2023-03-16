@@ -40,6 +40,16 @@ const createAddButton = () => {
     return botButton;
 };
 
+const createAddButtonInCall = () => {
+    const botButton = document.createElement('button');
+    botButton.id = 'add-bot-btn-in-call';
+    botButton.innerHTML = `Add ${DEFAULT_BOT_NAME}`;
+    botButton.style = buttonStyle;
+    botButton.onmouseover = onmouseover(botButton);
+    botButton.onmouseout = onmouseout(botButton);
+    return botButton;
+};
+
 const createDeleteButton = () => {
     const botButton = document.createElement('button');
     botButton.id = 'delete-bot-btn';
@@ -61,4 +71,5 @@ export {
     createAddButton,
     createDeleteButton,
     createBotBtnBlock,
+    createAddButtonInCall,
 };

@@ -53,7 +53,51 @@ const findGuestList = (block) => {
     return guestEmailList;
 };
 
+const findMeetingIdBlockInCall = () => {
+    let addBotInCallBlock;
+    const location = window.location.href;
+    const meetingId = location.split('.com/')[1].split('?')[0];
+    const meetingUrl = location.split('?')[0];
+
+    const divTags = document.getElementsByTagName('div');
+    let meetingIdBlock;
+    let meetingTitleBlock;
+    let meetingTitle;
+
+    for (let i = 0; i < divTags.length; i += 1) {
+        if (divTags[i].textContent === meetingId) {
+            meetingIdBlock = divTags[i];
+            break;
+        }
+
+        if (divTags[i].getAttribute('data-meeting-title')) {
+            console.log('divTags[i]', divTags[i]);
+            meetingTitleBlock = divTags[i];
+            break;
+        }
+    }
+
+    if (meetingIdBlock) {
+        addBotInCallBlock = meetingIdBlock
+            .parentElement
+            .parentElement
+            .parentElement
+            .parentElement
+            .parentElement;
+
+        meetingTitle = '(No title)';
+    }
+
+    if (meetingTitleBlock) {
+        addBotInCallBlock = meetingTitleBlock.parentElement;
+        meetingTitle = meetingTitleBlock.getAttribute('data-meeting-title');
+    }
+
+    return { addBotInCallBlock, meetingUrl, meetingTitle };
+};
+
 export {
     findMeetingBlockItems,
     findGuestList,
+    findMeetingIdBlockInCall,
 };
