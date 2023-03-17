@@ -57,7 +57,7 @@ const findMeetingIdBlockInCall = () => {
     let addBotInCallBlock;
     const location = window.location.href;
     const meetingId = location.split('.com/')[1].split('?')[0];
-    const meetingUrl = location.split('?')[0];
+    const meetingUrl = location.split('://')[1].split('?')[0];
 
     const divTags = document.getElementsByTagName('div');
     let meetingIdBlock;
@@ -71,7 +71,6 @@ const findMeetingIdBlockInCall = () => {
         }
 
         if (divTags[i].getAttribute('data-meeting-title')) {
-            console.log('divTags[i]', divTags[i]);
             meetingTitleBlock = divTags[i];
             break;
         }

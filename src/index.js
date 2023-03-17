@@ -1,6 +1,6 @@
-import {
-    INIT_TIMEOUT,
-} from './constants';
+import { INIT_TIMEOUT } from './constants';
+import { getTokenFromChromeStorage } from './services/authService';
+import addStylesToHTML from './helpers/stylesHelper';
 import {
     formatMeetingTime,
     createAddButton,
@@ -19,15 +19,14 @@ import {
     getBotByMeetingLink,
     addGuestsToTheMeeting,
 } from './services/botService';
-import {
-    getTokenFromChromeStorage,
-} from './services/authService';
 
 let meetingUrl;
 let bot;
 let startMeetingTime;
 let meetingTitle;
 let guestEmailList = [];
+addStylesToHTML();
+
 const btnBlockName = 'bot-btn-block';
 const addButton = createAddButton();
 const addButtonInCall = createAddButtonInCall();
@@ -37,6 +36,7 @@ botBtnBlock.appendChild(addButton);
 botBtnBlock.appendChild(deleteButton);
 
 const addBotCall = async () => {
+    addButton.firstChild.style.display = 'inline-block';
     addBot(startMeetingTime, meetingUrl, meetingTitle).then(
         async (res) => {
             if (res) {
@@ -46,28 +46,40 @@ const addBotCall = async () => {
                 await addGuestsToTheMeeting(bot.meetingID, guestEmailList);
             }
         },
-    ).catch((error) => console.log('Adding error', error));
+    )
+        .catch((error) => console.log('Adding error', error))
+        .finally(() => {
+            addButton.firstChild.style.display = 'none';
+        });
 };
 
 const addBotDuringTheCall = async () => {
+    addButtonInCall.firstChild.style.display = 'inline-block';
     addBot(null, meetingUrl, meetingTitle).then(
         async (res) => {
-            if (res) {
-                bot = res;
-                addButtonInCall.style.display = 'none';
-            }
+            if (res) bot = res;
         },
-    ).catch((error) => console.log('Adding error', error));
+    )
+        .catch((error) => console.log('Adding error', error))
+        .finally(() => {
+            addButtonInCall.firstChild.style.display = 'none';
+            addButtonInCall.style.display = 'none';
+        });
 };
 
 const deleteBotCall = async () => {
+    deleteButton.firstChild.style.display = 'inline-block';
     deleteBot(bot).then(
         (res) => {
             bot = res;
             deleteButton.style.display = 'none';
             addButton.style.display = 'inline';
         },
-    ).catch((error) => console.log('Deleting error', error));
+    )
+        .catch((error) => console.log('Deleting error', error))
+        .finally(() => {
+            deleteButton.firstChild.style.display = 'none';
+        });
 };
 
 addButton.addEventListener('click', addBotCall);

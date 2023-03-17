@@ -1,5 +1,7 @@
 import { DEFAULT_BOT_NAME } from '../constants';
 
+const spinner = '<i style="margin-left: -8px; margin-right: 8px; display: none;" class="fa fa-spinner fa-spin spinner"></i>';
+
 const formatMeetingTime = (timeBlock) => {
     let currentDayHalf;
     const date = timeBlock.textContent;
@@ -19,7 +21,7 @@ const formatMeetingTime = (timeBlock) => {
     return currentFormatDate.toISOString();
 };
 
-const buttonStyle = 'display: inline; color: #fff; cursor: pointer; padding: 0 16px; background-color: rgb(26,115,232); line-height: 36px; font-family: \'Google Sans\',Roboto,Arial,sans-serif; font-weight: 500; outline: none; border: none; border-radius: 5px; margin-top: 6px;';
+const buttonStyle = 'display: inline; color: #fff; cursor: pointer; padding: 0 20px; background-color: rgb(26,115,232); line-height: 36px; font-family: \'Google Sans\',Roboto,Arial,sans-serif; font-weight: 500; outline: none; border: none; border-radius: 5px; margin-top: 6px;';
 const onmouseover = (el) => function () {
     // eslint-disable-next-line no-param-reassign
     el.style.backgroundColor = 'rgb(66,133,244)';
@@ -33,7 +35,7 @@ const onmouseout = (el) => function () {
 const createAddButton = () => {
     const botButton = document.createElement('button');
     botButton.id = 'add-bot-btn';
-    botButton.innerHTML = `Add ${DEFAULT_BOT_NAME}`;
+    botButton.innerHTML = `${spinner} Add ${DEFAULT_BOT_NAME}`;
     botButton.style = buttonStyle;
     botButton.onmouseover = onmouseover(botButton);
     botButton.onmouseout = onmouseout(botButton);
@@ -43,7 +45,7 @@ const createAddButton = () => {
 const createAddButtonInCall = () => {
     const botButton = document.createElement('button');
     botButton.id = 'add-bot-btn-in-call';
-    botButton.innerHTML = `Add ${DEFAULT_BOT_NAME}`;
+    botButton.innerHTML = `${spinner} Add ${DEFAULT_BOT_NAME}`;
     botButton.style = buttonStyle;
     botButton.onmouseover = onmouseover(botButton);
     botButton.onmouseout = onmouseout(botButton);
@@ -53,7 +55,7 @@ const createAddButtonInCall = () => {
 const createDeleteButton = () => {
     const botButton = document.createElement('button');
     botButton.id = 'delete-bot-btn';
-    botButton.innerHTML = `Delete ${DEFAULT_BOT_NAME}`;
+    botButton.innerHTML = `${spinner} Delete ${DEFAULT_BOT_NAME}`;
     botButton.style = buttonStyle;
     botButton.onmouseover = onmouseover(botButton);
     botButton.onmouseout = onmouseout(botButton);
